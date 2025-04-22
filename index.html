@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Ultimate IQ Test</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive;
+      background-color: #1e1e1e;
+      color: #fff;
+      text-align: center;
+      padding: 50px;
+      overflow: hidden;
+    }
+
+    .question-box {
+      background: #333;
+      padding: 20px;
+      border-radius: 10px;
+      margin: 20px auto;
+      max-width: 400px;
+      box-shadow: 0 0 10px lime;
+    }
+
+    button {
+      margin: 10px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      background: hotpink;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    #loading {
+      font-size: 22px;
+      color: yellow;
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+      50% { opacity: 0.2; }
+    }
+
+    #resultBox h2 {
+      animation: pop 1s ease-in-out infinite alternate;
+    }
+
+    @keyframes pop {
+      from { transform: scale(1); color: lime; }
+      to { transform: scale(1.1); color: cyan; }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>ULTIMATE IQ TEST</h1>
+
+  <audio id="bgMusic" autoplay loop>
+    <source src="https://files.freemusicarchive.org/storage-freemusicarchive-org/music/ccCommunity/KieLoKaz/Free_Sample_Pack_2017/KieLoKaz_-_03_-_Disco_Disco.mp3" type="audio/mpeg">
+  </audio>
+
+  <audio id="clickSound">
+    <source src="https://www.soundjay.com/buttons/sounds/button-16.mp3" type="audio/mpeg">
+  </audio>
+
+  <div id="testBox" class="question-box">
+    <p id="question">Get ready for your first question...</p>
+    <div id="answers"></div>
+    <button onclick="nextQuestion()">Start</button>
+  </div>
+
+  <div id="loadingBox" class="question-box hidden">
+    <p id="loading">Scanning your brain cells...</p>
+  </div>
+
+  <div id="resultBox" class="question-box hidden">
+    <h2>Your IQ Score:</h2>
+    <p id="result"></p>
+    <button onclick="location.reload()">Try Again?</button>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        q: "How many sides does a circle have?",
+        a: ["Two. Inside and Outside", "Four?", "Banana"],
+      },
+      {
+        q: "What color is water?",
+        a: ["Transparent", "Water-colored", "All of them, depends on vibe"],
+      },
+      {
+        q: "Which number comes after 10?",
+        a: ["Twenty", "Eleven-ish", "Pi"],
+      },
+      {
+        q: "How do you spell IQ?",
+        a: ["Eye Queue", "Ickyoo", "I.Q. (Intellectual Queen)"],
+      },
+      {
+        q: "What's the square root of a potato?",
+        a: ["Fries", "Mashed", "Couch"],
+      }
+    ];
+
+    let current = 0;
+
+    function nextQuestion() {
+      if (current >= questions.length) {
+        beginLoading();
+        return;
+      }
+
+      const q = questions[current];
+      document.getElementById('question').innerText = q.q;
+
+      const answersDiv = document.getElementById('answers');
+      answersDiv.innerHTML = "";
+
+      q.a.forEach(ans => {
+        const btn = document.createElement("button");
+        btn.innerText = ans;
+        btn.onclick = () => {
+          document.getElementById("clickSound").play();
+          current++;
+          nextQuestion();
+        };
+        answersDiv.appendChild(btn);
+      });
+
+      document.querySelector("#testBox button").style.display = "none";
+    }
+
+    function beginLoading() {
+      document.getElementById("testBox").classList.add("hidden");
+      document.getElementById("loadingBox").classList.remove("hidden");
+
+      setTimeout(showResult, 4000); // 4 seconds of fake scanning
+    }
+
+    function showResult() {
+      document.getElementById("loadingBox").classList.add("hidden");
+      document.getElementById("resultBox").classList.remove("hidden");
+
+      const resultText = [
+        "Congratulations! Your IQ is... OVER 9000!!!",
+        "You’re officially smarter than a toaster. And maybe a cat.",
+        "Your brain radiates WiFi. Please stop interfering with satellites.",
+        "You are a genius. NASA wants to hire you for moon cheese research.",
+        "IQ = Impressive Quirkiness. You win!"
+      ];
+
+      const r = resultText[Math.floor(Math.random() * resultText.length)];
+      document.getElementById("result").innerText = r;
+    }
+  </script>
+
+</body>
+</html>
